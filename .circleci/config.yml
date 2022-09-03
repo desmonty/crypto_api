@@ -15,7 +15,7 @@ jobs:
           app-dir: ./
       - run:
           name: Run tests
-          command: python -m unittest discover test
+          command: python -m unittest discover tests
 
 workflows:
   test:

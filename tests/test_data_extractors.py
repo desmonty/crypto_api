@@ -27,7 +27,7 @@ class TestDataExtractors(unittest.TestCase):
         }
         headers = {
           'Accepts': 'application/json',
-          'X-CMC_PRO_API_KEY': os.getenv('COINMARKETCAP_API_KEY'),
+          'X-CMC_PRO_API_KEY': os.getenv('API_KEY_COINMARKETCAP'),
         }
 
         response = requests.get(url, params=parameters, headers=headers)
