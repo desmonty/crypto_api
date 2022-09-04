@@ -1,13 +1,7 @@
-import json
-import os
-import requests
 import unittest
 
 from clients.Client import Client
-
-
-VALID_ID_LIST = ["coingecko"]
-VALID_SUBSET_LIST = [None, "random-10", "adaxtz", "test"]
+from tests.test_data import ID_TYPE_LIST, SUBSET_LIST 
 
 
 class TestClient(unittest.TestCase):
@@ -25,11 +19,11 @@ class TestClient(unittest.TestCase):
         self.assertRaises(Exception, Client.get_asset_map, ["invalid_argument_type"])
         self.assertRaises(Exception, Client.get_asset_map, "invalid_id")
         
-        for valid_id in VALID_ID_LIST:
+        for valid_id in ID_TYPE_LIST:
             self.assertRaises(Exception, Client.get_asset_map, valid_id, ["invalid_subset_id_type"])
             self.assertRaises(Exception, Client.get_asset_map, valid_id, "invalid_subset_id")
 
-            for subset_id in VALID_SUBSET_LIST:
+            for subset_id in SUBSET_LIST:
                 self.assertIsInstance(Client.get_asset_map(valid_id, subset_id), dict)
 
 
