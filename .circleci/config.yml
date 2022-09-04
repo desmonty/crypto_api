@@ -1,0 +1,23 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@1.5.0
+
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/python:3.10.2
+
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+          app-dir: ./
+      - run:
+          name: Run tests
+          command: python -m unittest discover tests
+
+workflows:
+  test:
+    jobs:
+      - build-and-test
