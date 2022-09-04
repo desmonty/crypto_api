@@ -1,7 +1,7 @@
 import unittest
 
 from clients.Client import Client
-from tests.test_data import ID_TYPE_LIST, SUBSET_LIST 
+from tests.test_data import ID_TYPE_LIST, SUBSET_LIST
 
 
 class TestClient(unittest.TestCase):
