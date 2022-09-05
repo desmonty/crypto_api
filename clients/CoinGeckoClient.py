@@ -60,12 +60,12 @@ class CoinGeckoClient(Client):
         try:
             return self.get_json(url, headers)
         except Exception as e:
-            print(
-                f"Asset Name: {self.digital_assets[asset_id]}\n"
+            raise Exception(
+                f"Error message: {e}\n"
+                + f"Asset Name: {self.digital_assets[asset_id]}\n"
                 + f"vs_currency: {self.vs_currency}\n"
                 + f"days: {days+1}\n"
             )
-            raise e
 
     def daily_market_data(
         self,
