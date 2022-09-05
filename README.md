@@ -50,6 +50,7 @@ Those env variables are API keys used for CoinMarketCap, Nomics and CoinAPI.
         - [ ] Create visuals for data integrity
             - [ ] Distribution for each dimensions/metrics
             - [ ] Total NA values
+    - [ ] Add Code Coverage metrics in Git
 
 - [ ] V1
     - [ ] Data Infrastructure
