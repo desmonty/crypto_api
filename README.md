@@ -36,11 +36,11 @@ Those env variables are API keys used for CoinMarketCap, Nomics and CoinAPI.
     - [X] Find more about stakeable digital asset
     - [X] Implement unittest / CircleCI framework
     - [ ] Data Extraction
-        - [ ] CoinGecko
+        - [X] CoinGecko
             - [X] API Connection Test
             - [X] Connector
             - [X] daily_market_data
-            - [ ] Fully tested
+            - [X] Fully tested
         - [ ] Other API
             - [ ] API Connection Test
             - [ ] Connector
