@@ -18,11 +18,11 @@ class Client(object):
             response = requests.get(url, headers=headers)
             response.raise_for_status()
         except requests.exceptions.HTTPError as http_error:
-            print(
+            raise requests.exceptions.HTTPError(
                 "An HTTPError occured when sending this URL:\n"
-                + f"url: {url}"
+                + f"url: {url}\n"
+                + f"error_message: {http_error}"
             )
-            raise http_error
         except Exception as e:
             raise e
 
