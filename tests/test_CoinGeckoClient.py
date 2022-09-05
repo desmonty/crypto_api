@@ -58,7 +58,7 @@ class TestCoinGeckoClient(unittest.TestCase):
                 self.assertIn(col, df_market_data.columns)
 
             num_assets = len(client.digital_assets)
-            self.assertEquals(len(df_market_data), num_assets * days)
+            self.assertEqual(len(df_market_data), num_assets * days)
 
 
 if __name__ == '__main__':
