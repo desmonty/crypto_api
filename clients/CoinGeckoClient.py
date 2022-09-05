@@ -2,6 +2,7 @@ import pandas as pd
 import json
 
 from datetime import datetime, timedelta
+from typing import List, Optional
 
 from clients.Client import Client
 
@@ -17,7 +18,11 @@ class CoinGeckoClient(Client):
           schedule with AirFlow
 
     """
-    def __init__(self, subset_id: str=None, vs_currency: str="usd"):
+    def __init__(
+        self,
+        subset_id: Optional[str] = None,
+        vs_currency: Optional[str] = "usd"
+    ):
         """
         Parameters
         ----------
@@ -70,7 +75,7 @@ class CoinGeckoClient(Client):
     def daily_market_data(
         self,
         days: int,
-        metrics: list=["prices", "market_caps", "total_volumes"]
+        metrics: Optional[List[str]] = ["prices", "market_caps", "total_volumes"]
     ) -> pd.DataFrame:
         """ Return a pandas dataframe containing market statistics for the
         last {days=30} days for the assets found both in the JSON file and
