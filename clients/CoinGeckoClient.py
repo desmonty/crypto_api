@@ -15,8 +15,8 @@ class CoinGeckoClient(Client):
     ----
 
     - [ ] Implement retry strategy when applicable
-    - [ ] Get 5-minute interval data daily and ingest in ClickHouse DB,
-          schedule with AirFlow
+    - [ ] Get 5-minute interval data and ingest in ClickHouse DB,
+          schedule to run daily with AirFlow
 
     """
     def __init__(

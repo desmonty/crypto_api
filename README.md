@@ -35,27 +35,21 @@ Those env variables are API keys used for CoinMarketCap, Nomics and CoinAPI.
     - [X] Read about given website and their APIs
     - [X] Find more about stakeable digital asset
     - [X] Implement unittest / CircleCI framework
-    - [ ] Data Extraction
+    - [X] Data Extraction
         - [X] CoinGecko
             - [X] API Connection Test
             - [X] Connector
             - [X] daily_market_data
             - [X] Fully tested
-        - [ ] Other API
-            - [ ] API Connection Test
-            - [ ] Connector
-            - [ ] daily_market_data
-            - [ ] Fully tested
     - [ ] Data Validation Reporting
         - [ ] Create visuals for data integrity
-            - [ ] Distribution for each dimensions/metrics
+            - [X] plot for each metrics
             - [ ] Total NA values
     - [ ] Add Code Coverage metrics in Git
 
 - [ ] V1
     - [ ] Data Infrastructure
-        - [ ] ClickHouse Docker instance for errors, raw data
-        - [ ] Data warehousing
+        - [ ] ClickHouse Docker instance for errors, raw data and data warehouse
     - [ ] Implement Failsafes
         - [ ] Save all raw extracted data in raw_data_table
         - [ ] Save all requests/pipeline errors in error_table
@@ -68,3 +62,4 @@ Those env variables are API keys used for CoinMarketCap, Nomics and CoinAPI.
             - [ ] Airflow Daily extraction (frequency depending on API rights)
     - [ ] Data Validation
         - [ ] Value range checking following expert's recommendation
+        - [ ] Unittest for dashboard
