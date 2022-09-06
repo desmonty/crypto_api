@@ -2,7 +2,8 @@ import pandas as pd
 import json
 
 from datetime import datetime, timedelta
-from typing import List, Optional
+from numbers import Number
+from typing import Dict, List, Optional, Tuple
 
 from clients.Client import Client
 
@@ -21,7 +22,7 @@ class CoinGeckoClient(Client):
     def __init__(
         self,
         subset_id: Optional[str] = None,
-        vs_currency: Optional[str] = "usd"
+        vs_currency: str = "usd"
     ):
         """
         Parameters
@@ -75,8 +76,8 @@ class CoinGeckoClient(Client):
     def daily_market_data(
         self,
         days: int,
-        metrics: Optional[List[str]] = ["prices", "market_caps", "total_volumes"]
-    ) -> pd.DataFrame:
+        metrics: List[str] = ["prices", "market_caps", "total_volumes"]
+    ) -> Tuple[pd.DataFrame, Dict[str, Number]]:
         """ Return a pandas dataframe containing market statistics for the
         last {days=30} days for the assets found both in the JSON file and
         using the coingecko API /coins/{id}/market_chart endpoint.
