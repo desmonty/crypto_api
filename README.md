@@ -41,10 +41,11 @@ Those env variables are API keys used for CoinMarketCap, Nomics and CoinAPI.
             - [X] Connector
             - [X] daily_market_data
             - [X] Fully tested
-    - [ ] Data Validation Reporting
-        - [ ] Create visuals for data integrity
+    - [X] Data Validation
+        - [X] Create visuals for data integrity
             - [X] plot for each metrics
-            - [ ] Total NA values
+            - [X] Total NA values
+        - [ ] `DailyMarketSchema.py`: Check if dates are no later than `days` ago
     - [ ] Add Code Coverage metrics in Git
 
 - [ ] V1

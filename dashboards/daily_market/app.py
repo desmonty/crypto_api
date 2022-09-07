@@ -1,3 +1,4 @@
+import dash_bootstrap_components as dbc
 import pandera as pa
 import plotly.express as px
 import sys, os
@@ -5,6 +6,7 @@ import sys, os
 from dash import Dash, html, dcc, Input, Output
 from dash.dash_table import DataTable
 from pandera.typing import DataFrame
+from plotly.graph_objs import Layout
 from typing import List, Optional
 
 
@@ -19,26 +21,27 @@ from clients.CoinGeckoClient import CoinGeckoClient
 from schemas.DailyMarketSchema import DailyMarketSchema
 
 
+###################
 """ Script Parameters
 """
-
-SUBSET_ID = "adaxtz"
+# Set to None to get information for all assets
+SUBSET_ID = None
 NUMBER_OF_DAYS = 30
 METRICS = ["prices", "total_volumes", "market_caps"]
 
 ###################
-
-
-# visit http://127.0.0.1:8050/ to visualize the report
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-app = Dash(__name__, external_stylesheets=external_stylesheets)
-
+""" Data Extraction 
+"""
 # Create Client
 client_usd = CoinGeckoClient(SUBSET_ID, "usd")
 
 # Get market data
 df_market = client_usd.daily_market_data(NUMBER_OF_DAYS, metrics=METRICS)
 
+app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
+###################
+""" Dashboard functions
+"""
 
 @pa.check_types
 def dashboard_daily_market(
@@ -53,33 +56,52 @@ def dashboard_daily_market(
         A dataframe that is validated using schemas.DailarketSchema
     """
     bottom_table = dataframe[dataframe["dates"] == dataframe["dates"].max()]
-
     assets = dataframe["asset_name"].unique()
 
-    return html.Div(children=[
-        html.H1(children='Data Quality Report'),
+    controls = dbc.Card([
         html.Div([
-            html.Div(
-                dcc.Dropdown(
-                    metrics, 
-                    "prices", 
-                    id='filter-metric',
-                    clearable=False,
-                    placeholder="Select a metric"
-                ), style={'width': '20%', 'display': 'inline-block'}
-            ),
-            html.Div(
-                dcc.Dropdown(
-                    assets, 
-                    assets[0], 
-                    id='filter-asset',
-                    clearable=False,
-                    placeholder="Select an asset"
-                ), style={'width': '20%', 'display': 'inline-block'})
+            dbc.Label("Select a metric:"),
+            dcc.Dropdown(
+                id="filter-metric",
+                options=metrics,
+                clearable=False,
+                value="prices"
+            )
         ]),
-        dcc.Graph(id="metric_line_chart"),
-        DataTable(bottom_table.to_dict('records'))
-    ])
+        html.Div([
+            dbc.Label("Select an asset:"),
+            dcc.Dropdown(
+                id="filter-asset",
+                options=assets,
+                clearable=False,
+                value=assets[0]
+            )
+        ])
+    ], body=True)
+
+    return dbc.Container([
+        html.H1("Data Quality Report"),
+        html.Hr(),
+        dbc.Row([
+            dbc.Col(controls, md=4),
+            dbc.Col(dcc.Graph(id="metric_line_chart"), md=8)
+        ], align="center"),
+        html.Hr(),
+        dbc.Col(dcc.Graph(id="na_figure"), md=12),
+        html.Hr(),
+        dbc.Col(DataTable(
+            id='data_table',
+            columns=[{'id': c, 'name': c} for c in dataframe.columns],
+            style_header={
+                'backgroundColor': 'rgb(30, 30, 30)',
+                'color': 'white'
+            },
+            style_data={
+                'backgroundColor': 'rgb(50, 50, 50)',
+                'color': 'white'
+            }
+        ), md=12)
+    ], fluid=True)
 
 @app.callback(
     Output("metric_line_chart", "figure"),
@@ -95,12 +117,45 @@ def update_metric_line_chart(metric: str, asset: str):
         labels = {
             "dates": "Date",
             metric: f"{metric} ($USD)"
-        }
+        },
+        template="plotly_dark"
     )
+    #fig.update_layout({'plot_bgcolor': 'rgba(0,0,0,0)','paper_bgcolor': 'rgba(0,0,0,0)'})
     return fig
+
+@app.callback(
+    Output("na_figure", "figure"),
+    Input("filter-asset", "value"))
+def get_na_figure(asset: str):
+    df = df_market.loc[df_market["asset_name"] == asset]
+    df = df[METRICS]
+    series_null_count = 100.0 * df.isnull().sum() / len(df)
+    df_null_count = series_null_count.reset_index()
+
+    fig = px.bar(
+        df_null_count,
+        x="index",
+        y=0,
+        labels={
+            "index": " ",
+        },
+        template="plotly_dark",
+        title="Percentage of Null values in the extracted data"
+    )
+
+    #fig.update_layout({'plot_bgcolor': 'rgba(0,0,0,0)','paper_bgcolor': 'rgba(0,0,0,0)'})
+
+    return fig
+
+@app.callback(
+    Output("data_table", "data"),
+    Input("filter-asset", "value"))
+def generate_datatable(asset: str):
+    df = df_market.loc[df_market["asset_name"] == asset]
+    return df.to_dict('records')
 
 
 if __name__ == "__main__":
-    # Generate and deploy Data Quality report
+    # visit http://127.0.0.1:8050/ to visualize the report
     app.layout = dashboard_daily_market(df_market, metrics=METRICS)
     app.run_server(debug=True)
