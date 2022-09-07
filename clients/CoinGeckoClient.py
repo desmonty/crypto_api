@@ -2,6 +2,8 @@ import pandas as pd
 import json
 
 from datetime import datetime, timedelta
+from numbers import Number
+from typing import Dict, List, Optional, Tuple
 
 from clients.Client import Client
 
@@ -13,11 +15,15 @@ class CoinGeckoClient(Client):
     ----
 
     - [ ] Implement retry strategy when applicable
-    - [ ] Get 5-minute interval data daily and ingest in ClickHouse DB,
-          schedule with AirFlow
+    - [ ] Get 5-minute interval data and ingest in ClickHouse DB,
+          schedule to run daily with AirFlow
 
     """
-    def __init__(self, subset_id: str=None, vs_currency: str="usd"):
+    def __init__(
+        self,
+        subset_id: Optional[str] = None,
+        vs_currency: str = "usd"
+    ):
         """
         Parameters
         ----------
@@ -60,18 +66,18 @@ class CoinGeckoClient(Client):
         try:
             return self.get_json(url, headers)
         except Exception as e:
-            print(
-                f"Asset Name: {self.digital_assets[asset_id]}\n"
+            raise Exception(
+                f"Error message: {e}\n"
+                + f"Asset Name: {self.digital_assets[asset_id]}\n"
                 + f"vs_currency: {self.vs_currency}\n"
                 + f"days: {days+1}\n"
             )
-            raise e
 
     def daily_market_data(
         self,
         days: int,
-        metrics: list=["prices", "market_caps", "total_volumes"]
-    ) -> pd.DataFrame:
+        metrics: List[str] = ["prices", "market_caps", "total_volumes"]
+    ) -> Tuple[pd.DataFrame, Dict[str, Number]]:
         """ Return a pandas dataframe containing market statistics for the
         last {days=30} days for the assets found both in the JSON file and
         using the coingecko API /coins/{id}/market_chart endpoint.
@@ -140,6 +146,11 @@ class CoinGeckoClient(Client):
                     "dates": tmp_dates,
                     metric: tmp_metric
                 })
+
+                # Remove duplicate on dates by keeping last value
+                df_tmp = df_tmp.sort_values(['dates']).groupby('dates').tail(1)
+                df_tmp.reset_index(drop=True, inplace=True)
+
                 df_result_asset = pd.merge(
                     df_result_asset,
                     df_tmp,

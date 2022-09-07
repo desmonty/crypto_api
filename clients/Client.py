@@ -1,13 +1,18 @@
 import json
 import requests
 
+from typing import Optional
 
 class Client(object):
     DIGITAL_ASSETS_ID_JSON = "./data/digital_assets_id.json"
     DIGITAL_ASSETS_SUBSETS_JSON = "./data/digital_assets_subsets.json"
 
     @classmethod
-    def get_json(cls, url: str, headers: dict=None) -> dict:
+    def get_json(
+        cls,
+        url: str,
+        headers: Optional[dict[str, str]] = None
+    ) -> dict:
         """Wrapper to extract data from an API
         """
         assert isinstance(url, str), f"type(url)={type(url)}!=str"
@@ -18,18 +23,22 @@ class Client(object):
             response = requests.get(url, headers=headers)
             response.raise_for_status()
         except requests.exceptions.HTTPError as http_error:
-            print(
+            raise requests.exceptions.HTTPError(
                 "An HTTPError occured when sending this URL:\n"
-                + f"url: {url}"
+                + f"url: {url}\n"
+                + f"error_message: {http_error}"
             )
-            raise http_error
         except Exception as e:
             raise e
 
         return response.json()
 
     @classmethod
-    def get_asset_map(cls, id_type: str, subset_id: str=None) -> dict:
+    def get_asset_map(
+        cls,
+        id_type: str,
+        subset_id: Optional[str] = None
+    ) -> dict:
         """Retun a dict that maps digital assets name to their ids in a
         given framework
 

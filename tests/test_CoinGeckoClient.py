@@ -45,8 +45,8 @@ class TestCoinGeckoClient(unittest.TestCase):
         self.assertRaises(TypeError, client.daily_market_data) # No `days` provided
         self.assertRaises(AssertionError, client.daily_market_data, "invalid_days_type")
         self.assertRaises(AssertionError, client.daily_market_data, 0)
-        
-        test_days = [1, 2, 3]
+
+        test_days = [1, 2, 3, 4]
         expected_columns = ["dates", "asset_name"] + EXPECTED_METRICS
         for days in test_days:
             self.assertRaises(AssertionError, client.daily_market_data, days, "invalid_metrics_type")
@@ -58,7 +58,7 @@ class TestCoinGeckoClient(unittest.TestCase):
                 self.assertIn(col, df_market_data.columns)
 
             num_assets = len(client.digital_assets)
-            self.assertEquals(len(df_market_data), num_assets * days)
+            self.assertEqual(len(df_market_data), num_assets * days)
 
 
 if __name__ == '__main__':
