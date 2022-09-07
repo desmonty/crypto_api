@@ -6,6 +6,7 @@ from pandera.typing import Series
 from pandera.dtypes import Timestamp
 from typing import Dict
 
+
 class DailyMarketSchema(pa.SchemaModel):
     dates: Series[Timestamp] = pa.Field(
         lt=datetime.today(),
