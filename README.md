@@ -22,6 +22,14 @@ pip install -r requirements.txt
 python -m unittest discover tests
 ```
 
+## Dashboard
+
+Run the following command at the repo source to deploy a dashboard that can be
+viewed at http://127.0.0.1:8888/
+
+```bash
+python dashboards/daily_market/app.py
+```
 
 ## Env variables
 There are 3 environement variables defined within this project, that should be
