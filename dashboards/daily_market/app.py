@@ -25,7 +25,7 @@ from schemas.DailyMarketSchema import DailyMarketSchema
 """ Script Parameters
 """
 # Set to None to get information for all assets
-SUBSET_ID = None
+SUBSET_ID = "random-10"
 NUMBER_OF_DAYS = 30
 METRICS = ["prices", "total_volumes", "market_caps"]
 
@@ -156,6 +156,6 @@ def generate_datatable(asset: str):
 
 
 if __name__ == "__main__":
-    # visit http://127.0.0.1:8050/ to visualize the report
+    # visit http://127.0.0.1:8888/ to visualize the report
     app.layout = dashboard_daily_market(df_market, metrics=METRICS)
-    app.run_server(debug=True)
+    app.run_server(debug=True, port=8888)
