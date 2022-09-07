@@ -1,10 +1,19 @@
 import pandera as pa
 import plotly.express as px
+import sys, os
 
-from dash import Dash, html, dash_table, dcc, Input, Output
-from dash.dash_table import DataTable, Format
+from dash import Dash, html, dcc, Input, Output
+from dash.dash_table import DataTable
 from pandera.typing import DataFrame
 from typing import List, Optional
+
+
+#Following lines are for assigning parent directory dynamically.
+dir_path = os.path.dirname(os.path.realpath(__file__))
+parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
+pp_dir_path = os.path.abspath(os.path.join(parent_dir_path, os.pardir))
+sys.path += [parent_dir_path, pp_dir_path]
+
 
 from clients.CoinGeckoClient import CoinGeckoClient
 from schemas.DailyMarketSchema import DailyMarketSchema
