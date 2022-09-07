@@ -146,6 +146,11 @@ class CoinGeckoClient(Client):
                     "dates": tmp_dates,
                     metric: tmp_metric
                 })
+
+                # Remove duplicate on dates by keeping last value
+                df_tmp = df_tmp.sort_values(['dates']).groupby('dates').tail(1)
+                df_tmp.reset_index(drop=True, inplace=True)
+
                 df_result_asset = pd.merge(
                     df_result_asset,
                     df_tmp,

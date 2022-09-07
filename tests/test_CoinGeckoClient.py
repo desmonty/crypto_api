@@ -46,7 +46,7 @@ class TestCoinGeckoClient(unittest.TestCase):
         self.assertRaises(AssertionError, client.daily_market_data, "invalid_days_type")
         self.assertRaises(AssertionError, client.daily_market_data, 0)
         
-        test_days = [1, 2, 3]
+        test_days = [1, 2, 3, 4]
         expected_columns = ["dates", "asset_name"] + EXPECTED_METRICS
         for days in test_days:
             self.assertRaises(AssertionError, client.daily_market_data, days, "invalid_metrics_type")
