@@ -120,7 +120,6 @@ def update_metric_line_chart(metric: str, asset: str):
         },
         template="plotly_dark"
     )
-    #fig.update_layout({'plot_bgcolor': 'rgba(0,0,0,0)','paper_bgcolor': 'rgba(0,0,0,0)'})
     return fig
 
 @app.callback(
@@ -142,9 +141,6 @@ def get_na_figure(asset: str):
         template="plotly_dark",
         title="Percentage of Null values in the extracted data"
     )
-
-    #fig.update_layout({'plot_bgcolor': 'rgba(0,0,0,0)','paper_bgcolor': 'rgba(0,0,0,0)'})
-
     return fig
 
 @app.callback(
