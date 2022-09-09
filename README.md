@@ -1,4 +1,4 @@
-# vinter_test
+# Crypto API
 
 ## Proposal
 
